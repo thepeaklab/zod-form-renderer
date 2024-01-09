@@ -1,0 +1,24 @@
+{
+  "name": "zod-form-renderer",
+  "version": "0.1.0",
+  "description": "Render form controls from zod schema",
+  "main": "dist/index.js",
+  "exports": "./dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsup index.ts --format cjs,esm --dts",
+    "lint": "tsc"
+  },
+  "keywords": [
+    "zod",
+    "form",
+    "renderer",
+    "control"
+  ],
+  "author": "thepeaklab",
+  "license": "MIT",
+  "devDependencies": {
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3"
+  }
+}
