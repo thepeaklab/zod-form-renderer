@@ -8,6 +8,3 @@
  *   controls.email
  *   ...
  */
-export const example = () => {
-  console.log("Hello world");
-};
