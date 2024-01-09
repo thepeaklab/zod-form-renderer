@@ -8,3 +8,8 @@
  *   controls.email
  *   ...
  */
+export const transform = () => {
+  return {
+    name: "Zod",
+  };
+};
