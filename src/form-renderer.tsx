@@ -31,7 +31,7 @@ export function renderForm<
     (ctrls, [key, value]) => {
       return { ...ctrls, [key]: findRenderer(value) };
     },
-    {} as Record<TKey, TRenderer<TShape[TKey]>>
+    {} as { [K in TKey]: TRenderer<TShape[K]> }
   );
 
   return { controls };
