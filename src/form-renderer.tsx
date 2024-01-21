@@ -1,79 +1,22 @@
-import { ComponentPropsWithRef } from "react";
 import { z } from "zod";
-
-const NullRenderer = () => null;
-
-type InputProps = ComponentPropsWithRef<"input">;
-
-type InputRendererOptions = InputProps & {
-  label: string;
-};
-
-const InputRenderer =
-  (renderOptions: InputProps) => (userOptions: InputRendererOptions) => {
-    const options = { ...renderOptions, ...userOptions };
-
-    return (
-      <div>
-        <label htmlFor={options.name}>{options.label}: </label>
-        <br />
-        <input {...options} />
-      </div>
-    );
-  };
-
-type CheckboxRendererOptions = InputProps & {
-  label: string;
-};
-
-const CheckboxRenderer = (userOptions: CheckboxRendererOptions) => {
-  const options = { type: "checkbox", ...userOptions };
-
-  return (
-    <label htmlFor={options.name}>
-      <input {...options} />
-      {options.label}
-    </label>
-  );
-};
-
-type SelectOptionValue = ComponentPropsWithRef<"option">["value"];
-
-type SelectRendererOptions<TValue extends SelectOptionValue> =
-  ComponentPropsWithRef<"select"> & {
-    label: string;
-    options: { value: TValue; label: string }[];
-  };
-
-const SelectRenderer = <TValue extends SelectOptionValue>(
-  userOptions: SelectRendererOptions<TValue>
-) => {
-  return (
-    <div>
-      <label htmlFor={userOptions.name}>{userOptions.label}: </label>
-      <br />
-      <select {...userOptions}>
-        {userOptions.options.map((option) => (
-          <option key={option.value?.toString()} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-    </div>
-  );
-};
+import {
+  CheckboxRenderer,
+  InputRenderer,
+  NullRenderer,
+  SelectRenderer,
+} from "./field-renderers";
 
 type TRenderer<TValue> = TValue extends z.ZodEnum<
   infer TEnum extends [string, ...string[]]
 >
-  ? typeof SelectRenderer<TEnum[number]>
+  ? ReturnType<typeof SelectRenderer<TEnum[number]>>
   : TValue extends z.ZodType<string>
   ? ReturnType<typeof InputRenderer>
   : TValue extends z.ZodType<number>
   ? ReturnType<typeof InputRenderer>
   : TValue extends z.ZodType<boolean>
-  ? typeof CheckboxRenderer
-  : typeof NullRenderer;
+  ? ReturnType<typeof CheckboxRenderer>
+  : ReturnType<typeof NullRenderer>;
 
 export type FormRendererProps<
   TShape extends z.ZodRawShape,
@@ -102,21 +45,24 @@ export const FormRenderer = <
 };
 
 const findRenderer = <TValue extends z.ZodTypeAny>(value: TValue) => {
+  const name = value._def.name;
+  const schema = value;
+
   if (isEnum(value)) {
-    return SelectRenderer;
+    return SelectRenderer({ name, schema });
   }
 
   if (isString(value)) {
     const type = value.isEmail ? "email" : value.isURL ? "url" : "text";
-    return InputRenderer({ type });
+    return InputRenderer({ name, schema, type });
   }
 
   if (isNumber(value)) {
-    return InputRenderer({ type: "number" });
+    return InputRenderer({ name, schema, type: "number" });
   }
 
   if (isBoolean(value)) {
-    return CheckboxRenderer;
+    return CheckboxRenderer({ name, schema });
   }
 
   console.log("No renderer found for", value._def.typeName);
