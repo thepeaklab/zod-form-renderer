@@ -74,20 +74,32 @@ type TRenderer<TValue> = TValue extends z.ZodEnum<
   : TValue extends z.ZodType<boolean>
   ? typeof CheckboxRenderer
   : typeof NullRenderer;
-// datepicker
 
-export function renderForm<
+export type FormRendererProps<
   TShape extends z.ZodRawShape,
-  TKey extends keyof TShape
->(schema: z.ZodObject<TShape> | z.ZodEffects<z.ZodObject<TShape>>) {
+  TKey extends keyof TShape & string
+> = {
+  schema: z.ZodObject<TShape> | z.ZodEffects<z.ZodObject<TShape>>;
+  children: (controls: {
+    [K in Capitalize<TKey>]: TRenderer<TShape[Uncapitalize<K>]>;
+  }) => React.ReactNode;
+};
+
+export const FormRenderer = <
+  TShape extends z.ZodRawShape,
+  TKey extends keyof TShape & string
+>({
+  schema,
+  children,
+}: FormRendererProps<TShape, TKey>) => {
   const shape = isZodEffects(schema) ? schema._def.schema.shape : schema.shape;
 
   const controls = Object.entries(shape).reduce((ctrls, [key, value]) => {
-    return { ...ctrls, [key]: findRenderer(value) };
-  }, {} as { [K in TKey]: TRenderer<TShape[K]> });
+    return { ...ctrls, [capitalize(key)]: findRenderer(value) };
+  }, {} as { [K in Capitalize<TKey>]: TRenderer<TShape[Uncapitalize<K>]> });
 
-  return { controls };
-}
+  return children(controls);
+};
 
 const findRenderer = <TValue extends z.ZodTypeAny>(value: TValue) => {
   if (isEnum(value)) {
@@ -110,6 +122,10 @@ const findRenderer = <TValue extends z.ZodTypeAny>(value: TValue) => {
   console.log("No renderer found for", value._def.typeName);
   return NullRenderer;
 };
+
+function capitalize(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
 
 function isZodEffects<T extends z.ZodTypeAny>(
   value: z.ZodTypeAny
