@@ -10,6 +10,8 @@ type TRenderer<TValue> = TValue extends
   | z.ZodOptional<z.ZodTypeAny>
   | z.ZodNullable<z.ZodTypeAny>
   ? TRenderer<TValue["_def"]["innerType"]>
+  : TValue extends z.ZodEffects<z.ZodTypeAny>
+  ? TRenderer<TValue["_def"]["schema"]>
   : TValue extends z.ZodEnum<infer TEnum extends [string, ...string[]]>
   ? ReturnType<typeof SelectRenderer<TEnum[number]>>
   : TValue extends z.ZodType<string>
@@ -85,7 +87,8 @@ function isString(value: z.ZodTypeAny): value is z.ZodString {
   return (
     value &&
     (value._def.typeName === z.string()._def.typeName ||
-      isString(value._def.innerType))
+      isString(value._def.innerType) ||
+      isString(value._def.schema))
   );
 }
 
@@ -93,7 +96,8 @@ function isNumber(value: z.ZodTypeAny): value is z.ZodNumber {
   return (
     value &&
     (value._def.typeName === z.number()._def.typeName ||
-      isNumber(value._def.innerType))
+      isNumber(value._def.innerType) ||
+      isNumber(value._def.schema))
   );
 }
 
@@ -101,7 +105,8 @@ function isBoolean(value: z.ZodTypeAny): value is z.ZodBoolean {
   return (
     value &&
     (value._def.typeName === z.boolean()._def.typeName ||
-      isBoolean(value._def.innerType))
+      isBoolean(value._def.innerType) ||
+      isBoolean(value._def.schema))
   );
 }
 
@@ -111,6 +116,7 @@ function isEnum<T extends [string, ...string[]]>(
   return (
     value &&
     (value._def.typeName === z.enum([""])._def.typeName ||
-      isEnum(value._def.innerType))
+      isEnum(value._def.innerType) ||
+      isEnum(value._def.schema))
   );
 }

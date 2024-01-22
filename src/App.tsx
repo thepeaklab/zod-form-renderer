@@ -8,8 +8,9 @@ export const App = () => {
     email: z.string().email(),
     web: z.string().url().optional().nullable(),
     age: z.number(),
-    // TODO: Refine auf Feld erkennen!
+    // // Infering custom types is not possible, because they are of type ZodAny.
     // avatar: z.custom<File>().refine((file) => file.type.startsWith("image/")),
+    avatar: z.string().refine((s) => s.endsWith(".png")),
     accept: z.boolean(),
   });
 
@@ -20,7 +21,7 @@ export const App = () => {
   return (
     <div style={{ display: "flex", flexDirection: "column", rowGap: "2rem" }}>
       <FormRenderer schema={schemaWithEffects}>
-        {({ Title, Name, Email, Web, Age, Accept }) => (
+        {({ Title, Name, Email, Web, Age, Avatar, Accept }) => (
           <>
             <Title
               label="Title"
@@ -36,6 +37,7 @@ export const App = () => {
             <Email label="Email" />
             <Web label="Url" />
             <Age label="Age" />
+            <Avatar label="Avatar" />
             <Accept label="Accept privacy policy" />
           </>
         )}
