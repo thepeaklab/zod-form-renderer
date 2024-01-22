@@ -1,26 +1,5 @@
 import { z } from "zod";
-import {
-  CheckboxRenderer,
-  InputRenderer,
-  NullRenderer,
-  SelectRenderer,
-} from "./field-renderers";
-
-type TRenderer<TValue> = TValue extends
-  | z.ZodOptional<z.ZodTypeAny>
-  | z.ZodNullable<z.ZodTypeAny>
-  ? TRenderer<TValue["_def"]["innerType"]>
-  : TValue extends z.ZodEffects<z.ZodTypeAny>
-  ? TRenderer<TValue["_def"]["schema"]>
-  : TValue extends z.ZodEnum<infer TEnum extends [string, ...string[]]>
-  ? ReturnType<typeof SelectRenderer<TEnum[number]>>
-  : TValue extends z.ZodType<string>
-  ? ReturnType<typeof InputRenderer>
-  : TValue extends z.ZodType<number>
-  ? ReturnType<typeof InputRenderer>
-  : TValue extends z.ZodType<boolean>
-  ? ReturnType<typeof CheckboxRenderer>
-  : ReturnType<typeof NullRenderer>;
+import { TRenderer, useFormRenderer } from "./use-form-renderer";
 
 export type FormRendererProps<
   TShape extends z.ZodRawShape,
@@ -39,84 +18,7 @@ export const FormRenderer = <
   schema,
   children,
 }: FormRendererProps<TShape, TKey>) => {
-  const shape = isZodEffects(schema) ? schema._def.schema.shape : schema.shape;
-
-  const controls = Object.entries(shape).reduce((ctrls, [key, value]) => {
-    return { ...ctrls, [capitalize(key)]: findRenderer(value) };
-  }, {} as { [K in Capitalize<TKey>]: TRenderer<TShape[Uncapitalize<K>]> });
+  const controls = useFormRenderer(schema);
 
   return children(controls);
 };
-
-const findRenderer = <TValue extends z.ZodTypeAny>(value: TValue) => {
-  const name = value._def.name;
-  const schema = value;
-
-  if (isEnum(value)) {
-    return SelectRenderer({ name, schema });
-  }
-
-  if (isString(value)) {
-    const type = value.isEmail ? "email" : value.isURL ? "url" : "text";
-    return InputRenderer({ name, schema, type });
-  }
-
-  if (isNumber(value)) {
-    return InputRenderer({ name, schema, type: "number" });
-  }
-
-  if (isBoolean(value)) {
-    return CheckboxRenderer({ name, schema });
-  }
-
-  console.log("No renderer found for", value._def.typeName);
-  return NullRenderer;
-};
-
-function capitalize(str: string) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-function isZodEffects<T extends z.ZodTypeAny>(
-  value: z.ZodTypeAny
-): value is z.ZodEffects<T> {
-  return value._def.typeName === "ZodEffects";
-}
-
-function isString(value: z.ZodTypeAny): value is z.ZodString {
-  return (
-    value &&
-    (value._def.typeName === z.string()._def.typeName ||
-      isString(value._def.innerType) ||
-      isString(value._def.schema))
-  );
-}
-
-function isNumber(value: z.ZodTypeAny): value is z.ZodNumber {
-  return (
-    value &&
-    (value._def.typeName === z.number()._def.typeName ||
-      isNumber(value._def.innerType) ||
-      isNumber(value._def.schema))
-  );
-}
-
-function isBoolean(value: z.ZodTypeAny): value is z.ZodBoolean {
-  return (
-    value &&
-    (value._def.typeName === z.boolean()._def.typeName ||
-      isBoolean(value._def.innerType) ||
-      isBoolean(value._def.schema))
-  );
-}
-
-function isEnum<T extends [string, ...string[]]>(
-  value: z.ZodTypeAny
-): value is z.ZodEnum<T> {
-  return (
-    value &&
-    (value._def.typeName === z.enum([""])._def.typeName ||
-      isEnum(value._def.innerType) ||
-      isEnum(value._def.schema))
-  );
-}
