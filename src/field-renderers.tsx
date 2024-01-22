@@ -17,13 +17,18 @@ type InputFieldRendererProps = FieldRendererProps & {
 };
 
 export const InputRenderer =
-  ({ name, type }: InputFieldRendererProps) =>
-  (options: InputRendererProps) => {
+  ({ name, type, schema }: InputFieldRendererProps) =>
+  (userOptions: InputRendererProps) => {
+    const options = { name, type, ...userOptions };
+
     return (
       <div>
-        <label htmlFor={name}>{options.label}: </label>
+        <label htmlFor={name}>
+          {options.label}
+          {schema.isOptional() && ` (Optional)`}:{" "}
+        </label>
         <br />
-        <input name={name} type={type} {...options} />
+        <input {...options} />
       </div>
     );
   };
@@ -33,8 +38,9 @@ type CheckboxRendererOptions = ComponentPropsWithRef<"input"> & {
 };
 
 export const CheckboxRenderer =
-  (props: FieldRendererProps) => (userOptions: CheckboxRendererOptions) => {
-    const options = { type: "checkbox", ...userOptions };
+  ({ name }: FieldRendererProps) =>
+  (userOptions: CheckboxRendererOptions) => {
+    const options = { name, type: "checkbox", ...userOptions };
 
     return (
       <label htmlFor={options.name}>
@@ -53,14 +59,16 @@ type SelectRendererOptions<TValue extends SelectOptionValue> =
   };
 
 export const SelectRenderer =
-  <TValue extends SelectOptionValue>(props: FieldRendererProps) =>
+  <TValue extends SelectOptionValue>({ name }: FieldRendererProps) =>
   (userOptions: SelectRendererOptions<TValue>) => {
+    const options = { name, ...userOptions };
+
     return (
       <div>
-        <label htmlFor={userOptions.name}>{userOptions.label}: </label>
+        <label htmlFor={options.name}>{options.label}: </label>
         <br />
         <select {...userOptions}>
-          {userOptions.options.map((option) => (
+          {options.options.map((option) => (
             <option key={option.value?.toString()} value={option.value}>
               {option.label}
             </option>
