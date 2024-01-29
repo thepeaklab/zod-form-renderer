@@ -1,18 +1,14 @@
 import { ComponentPropsWithRef } from "react";
-import { FieldRendererProps } from "../renderer-mapper";
+import { FieldRendererContext } from "../renderer-mapper";
 
 type InputRendererProps = ComponentPropsWithRef<"input"> & {
   label: string;
 };
 
-type InputFieldRendererProps = FieldRendererProps & {
-  type: ComponentPropsWithRef<"input">["type"];
-};
-
 export const InputRenderer =
-  ({ name, type, schema }: InputFieldRendererProps) =>
+  ({ name, schema }: FieldRendererContext) =>
   (userOptions: InputRendererProps) => {
-    const options = { name, type, ...userOptions };
+    const options = { name, ...userOptions };
 
     return (
       <div>

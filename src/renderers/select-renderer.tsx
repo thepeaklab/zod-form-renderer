@@ -1,17 +1,17 @@
 import { ComponentPropsWithRef } from "react";
-import { FieldRendererProps } from "../renderer-mapper";
+import { FieldRendererContext } from "../renderer-mapper";
 
 type SelectOptionValue = ComponentPropsWithRef<"option">["value"];
 
-type SelectRendererOptions<TValue extends SelectOptionValue> =
+type SelectRendererProps<TValue extends SelectOptionValue> =
   ComponentPropsWithRef<"select"> & {
     label: string;
     options: { value: TValue; label: string }[];
   };
 
 export const SelectRenderer =
-  <TValue extends SelectOptionValue>({ name }: FieldRendererProps) =>
-  (userOptions: SelectRendererOptions<TValue>) => {
+  <TValue extends SelectOptionValue>({ name }: FieldRendererContext) =>
+  (userOptions: SelectRendererProps<TValue>) => {
     const options = { name, ...userOptions };
 
     return (
