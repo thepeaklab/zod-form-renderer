@@ -1,11 +1,12 @@
 import { z } from "zod";
+import { CheckboxRenderer } from "../renderers/checkbox-renderer";
+import { InputRenderer } from "../renderers/input-renderer";
+import { NullRenderer } from "../renderers/null-renderer";
+import { SelectRenderer } from "../renderers/select-renderer";
 import { mapToRenderer } from "./renderer-mapper";
-import { CheckboxRenderer } from "./renderers/checkbox-renderer";
-import { InputRenderer } from "./renderers/input-renderer";
-import { NullRenderer } from "./renderers/null-renderer";
-import { SelectRenderer } from "./renderers/select-renderer";
 import { isZodEffects } from "./typeguards";
 
+// TODO: Remove dependency on static renderers.
 export type TRenderer<TValue> = TValue extends
   | z.ZodOptional<z.ZodTypeAny>
   | z.ZodNullable<z.ZodTypeAny>

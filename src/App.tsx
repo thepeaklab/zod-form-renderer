@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { FormRenderer } from "./form-renderer";
-import { useFormRenderer } from "./use-form-renderer";
+import { FormRenderer } from "./lib/form-renderer";
+import { useFormRenderer } from "./lib/use-form-renderer";
 
 export const App = () => {
   const schema = z.object({

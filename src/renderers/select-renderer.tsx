@@ -1,5 +1,5 @@
 import { ComponentPropsWithRef } from "react";
-import { FieldRendererContext } from "../renderer-mapper";
+import { FieldRendererContext } from "../lib/renderer-mapper";
 
 type SelectOptionValue = ComponentPropsWithRef<"option">["value"];
 
