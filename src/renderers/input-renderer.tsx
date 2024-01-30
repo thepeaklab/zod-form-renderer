@@ -1,7 +1,7 @@
 import { ComponentPropsWithRef } from "react";
 import { FieldRendererContext } from "../lib/renderer-mapper";
 
-type InputRendererProps = ComponentPropsWithRef<"input"> & {
+export type InputRendererProps = ComponentPropsWithRef<"input"> & {
   label: string;
 };
 

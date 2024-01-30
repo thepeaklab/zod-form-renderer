@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { FormRenderer } from "./lib/form-renderer";
 import { useFormRenderer } from "./lib/use-form-renderer";
+import { fieldRenderers } from "./renderer-map";
 
 export const App = () => {
   const schema = z.object({
@@ -22,11 +23,11 @@ export const App = () => {
   });
 
   // When needed, you can also use a hook.
-  const { Age } = useFormRenderer(schema);
+  const { Age } = useFormRenderer(schema, fieldRenderers);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", rowGap: "2rem" }}>
-      <FormRenderer schema={schemaWithEffects}>
+      <FormRenderer schema={schemaWithEffects} renderers={fieldRenderers}>
         {({ Title, Name, Email, Web, Accept }) => (
           <>
             <Title

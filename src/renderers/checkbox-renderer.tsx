@@ -1,14 +1,14 @@
 import { ComponentPropsWithRef } from "react";
 import { FieldRendererContext } from "../lib/renderer-mapper";
 
-type CheckboxRendererOptions = ComponentPropsWithRef<"input"> & {
+export type CheckboxRendererProps = ComponentPropsWithRef<"input"> & {
   label: string;
 };
 
 export const CheckboxRenderer =
   ({ name }: FieldRendererContext) =>
-  (userOptions: CheckboxRendererOptions) => {
-    const options = { name, type: "checkbox", ...userOptions };
+  (props: CheckboxRendererProps) => {
+    const options = { name, type: "checkbox", ...props };
 
     return (
       <label htmlFor={options.name}>

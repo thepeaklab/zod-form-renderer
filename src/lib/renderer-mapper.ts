@@ -1,8 +1,5 @@
 import { z } from "zod";
-import { CheckboxRenderer } from "../renderers/checkbox-renderer";
-import { InputRenderer } from "../renderers/input-renderer";
-import { NullRenderer } from "../renderers/null-renderer";
-import { SelectRenderer } from "../renderers/select-renderer";
+import { RendererMap } from "./form-renderer";
 import { isBoolean, isEnum, isNumber, isString } from "./typeguards";
 
 export type FieldRendererContext = {
@@ -10,25 +7,42 @@ export type FieldRendererContext = {
   schema: z.ZodTypeAny;
 };
 
-// TODO: Remove dependency on static renderers.
-export const mapToRenderer = <TValue extends z.ZodTypeAny>(value: TValue) => {
+export const mapToRenderer = <
+  TValue extends z.ZodTypeAny,
+  TEnumProps,
+  TStringProps,
+  TNumberProps,
+  TBooleanProps
+>(
+  value: TValue,
+  rendererMap: RendererMap<
+    TEnumProps,
+    TStringProps,
+    TNumberProps,
+    TBooleanProps
+  >
+) => {
   const context: FieldRendererContext = {
     name: value._def.name,
     schema: value,
   };
 
   if (isEnum(value)) {
-    return SelectRenderer(context);
+    return rendererMap.Enum(context);
   }
 
-  if (isString(value) || isNumber(value)) {
-    return InputRenderer(context);
+  if (isString(value)) {
+    return rendererMap.String(context);
+  }
+
+  if (isNumber(value)) {
+    return rendererMap.Number(context);
   }
 
   if (isBoolean(value)) {
-    return CheckboxRenderer(context);
+    return rendererMap.Boolean(context);
   }
 
   console.log("No renderer found for", value._def.typeName);
-  return NullRenderer;
+  return rendererMap.Default(context);
 };
