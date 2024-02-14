@@ -13,7 +13,8 @@ export const mapToRenderer = <
   TStringProps,
   TNumberProps,
   TBooleanProps,
-  TDateProps
+  TDateProps,
+  TSubmitProps
 >(
   value: TValue,
   rendererMap: RendererMap<
@@ -21,7 +22,8 @@ export const mapToRenderer = <
     TStringProps,
     TNumberProps,
     TBooleanProps,
-    TDateProps
+    TDateProps,
+    TSubmitProps
   >
 ) => {
   const context: FieldRendererContext = {

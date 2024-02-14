@@ -13,6 +13,7 @@ import {
   SelectRenderer,
   SelectRendererProps,
 } from "./renderers/select-renderer";
+import { SubmitButton, SubmitButtonProps } from "./renderers/submit-renderer";
 
 // The user has to provide a renderer map with prop types
 // to allow IntelliSense type inference.
@@ -21,7 +22,8 @@ export const fieldRenderers: RendererMap<
   InputRendererProps,
   InputRendererProps,
   CheckboxRendererProps,
-  DatepickerRendererProps
+  DatepickerRendererProps,
+  SubmitButtonProps
 > = {
   Enum: SelectRenderer,
   String: InputRenderer,
@@ -29,4 +31,5 @@ export const fieldRenderers: RendererMap<
   Boolean: CheckboxRenderer,
   Date: DatepickerRenderer,
   Default: NullRenderer,
+  Submit: SubmitButton,
 };

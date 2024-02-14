@@ -12,7 +12,7 @@ export const App = () => {
       .email()
       .refine((s) => s.endsWith(".de")),
     web: z.string().url().optional().nullable(),
-    birthday: z.string().datetime(),
+    birthday: z.date(),
     age: z.number(),
     // Infering custom types is not possible, because they are of type ZodAny.
     avatar: z.custom<File>().refine((file) => file.type.endsWith(".png")),
@@ -29,7 +29,7 @@ export const App = () => {
   return (
     <div style={{ display: "flex", flexDirection: "column", rowGap: "2rem" }}>
       <FormRenderer schema={schemaWithEffects} renderers={fieldRenderers}>
-        {({ Title, Name, Email, Web, Birthday, Accept }) => (
+        {({ Title, Name, Email, Web, Birthday, Accept, Submit }) => (
           <>
             <Title
               label="Title"
@@ -54,6 +54,8 @@ export const App = () => {
             </label>
 
             <Accept label="Accept privacy policy" />
+
+            <Submit />
           </>
         )}
       </FormRenderer>

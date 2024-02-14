@@ -1,7 +1,7 @@
 import React from "react";
 import { z } from "zod";
 import { FieldRendererContext } from "./renderer-mapper";
-import { TRenderer, useFormRenderer } from "./use-form-renderer";
+import { useFormRenderer } from "./use-form-renderer";
 
 export type FieldRenderer<TProps> = (
   context: FieldRendererContext
@@ -12,7 +12,8 @@ export type RendererMap<
   TStringProps,
   TNumberProps,
   TBooleanProps,
-  TDateProps
+  TDateProps,
+  TSubmitProps
 > = {
   Enum: FieldRenderer<TEnumProps>;
   String: FieldRenderer<TStringProps>;
@@ -20,6 +21,7 @@ export type RendererMap<
   Boolean: FieldRenderer<TBooleanProps>;
   Date: FieldRenderer<TDateProps>;
   Default: FieldRenderer<void>;
+  Submit: (props: TSubmitProps) => React.ReactNode;
 };
 
 export type FormRendererProps<
@@ -29,7 +31,8 @@ export type FormRendererProps<
   TStringProps,
   TNumberProps,
   TBooleanProps,
-  TDateProps
+  TDateProps,
+  TSubmitProps
 > = {
   schema: z.ZodObject<TShape> | z.ZodEffects<z.ZodObject<TShape>>;
   renderers: RendererMap<
@@ -37,19 +40,24 @@ export type FormRendererProps<
     TStringProps,
     TNumberProps,
     TBooleanProps,
-    TDateProps
+    TDateProps,
+    TSubmitProps
   >;
   formProps?: React.ComponentPropsWithRef<"form">;
-  children: (controls: {
-    [K in Capitalize<TKey>]: TRenderer<
-      TShape[Uncapitalize<K>],
-      TEnumProps,
-      TStringProps,
-      TNumberProps,
-      TBooleanProps,
-      TDateProps
-    >;
-  }) => React.ReactNode;
+  children: (
+    controls: ReturnType<
+      typeof useFormRenderer<
+        TShape,
+        TKey,
+        TEnumProps,
+        TStringProps,
+        TNumberProps,
+        TBooleanProps,
+        TDateProps,
+        TSubmitProps
+      >
+    >
+  ) => React.ReactNode;
 };
 
 export const FormRenderer = <
@@ -59,7 +67,8 @@ export const FormRenderer = <
   TStringProps,
   TNumberProps,
   TBooleanProps,
-  TDateProps
+  TDateProps,
+  TSubmitProps
 >({
   schema,
   renderers,
@@ -72,7 +81,8 @@ export const FormRenderer = <
   TStringProps,
   TNumberProps,
   TBooleanProps,
-  TDateProps
+  TDateProps,
+  TSubmitProps
 >) => {
   const controls = useFormRenderer(schema, renderers);
 

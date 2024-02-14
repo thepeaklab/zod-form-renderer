@@ -10,7 +10,8 @@ export type TRenderer<
   TStringProps,
   TNumberProps,
   TBooleanProps,
-  TDateProps
+  TDateProps,
+  TSubmitProps
 > = TValue extends z.ZodOptional<z.ZodTypeAny> | z.ZodNullable<z.ZodTypeAny>
   ? TRenderer<
       TValue["_def"]["innerType"],
@@ -18,7 +19,8 @@ export type TRenderer<
       TStringProps,
       TNumberProps,
       TBooleanProps,
-      TDateProps
+      TDateProps,
+      TSubmitProps
     >
   : TValue extends z.ZodEffects<z.ZodTypeAny>
   ? TRenderer<
@@ -27,7 +29,8 @@ export type TRenderer<
       TStringProps,
       TNumberProps,
       TBooleanProps,
-      TDateProps
+      TDateProps,
+      TSubmitProps
     >
   : TValue extends z.ZodEnum<[string, ...string[]]>
   ? ReturnType<
@@ -36,7 +39,8 @@ export type TRenderer<
         TStringProps,
         TNumberProps,
         TBooleanProps,
-        TDateProps
+        TDateProps,
+        TSubmitProps
       >["Enum"]
     >
   : TValue extends z.ZodDate
@@ -46,7 +50,8 @@ export type TRenderer<
         TStringProps,
         TNumberProps,
         TBooleanProps,
-        TDateProps
+        TDateProps,
+        TSubmitProps
       >["Date"]
     >
   : TValue extends z.ZodType<string>
@@ -56,7 +61,8 @@ export type TRenderer<
         TStringProps,
         TNumberProps,
         TBooleanProps,
-        TDateProps
+        TDateProps,
+        TSubmitProps
       >["String"]
     >
   : TValue extends z.ZodType<number>
@@ -66,7 +72,8 @@ export type TRenderer<
         TStringProps,
         TNumberProps,
         TBooleanProps,
-        TDateProps
+        TDateProps,
+        TSubmitProps
       >["Number"]
     >
   : TValue extends z.ZodType<boolean>
@@ -76,7 +83,8 @@ export type TRenderer<
         TStringProps,
         TNumberProps,
         TBooleanProps,
-        TDateProps
+        TDateProps,
+        TSubmitProps
       >["Boolean"]
     >
   : ReturnType<
@@ -85,7 +93,8 @@ export type TRenderer<
         TStringProps,
         TNumberProps,
         TBooleanProps,
-        TDateProps
+        TDateProps,
+        TSubmitProps
       >["Default"]
     >;
 
@@ -96,7 +105,8 @@ export const useFormRenderer = <
   TStringProps,
   TNumberProps,
   TBooleanProps,
-  TDateProps
+  TDateProps,
+  TSubmitProps
 >(
   schema: z.ZodObject<TShape> | z.ZodEffects<z.ZodObject<TShape>>,
   renderers: RendererMap<
@@ -104,7 +114,8 @@ export const useFormRenderer = <
     TStringProps,
     TNumberProps,
     TBooleanProps,
-    TDateProps
+    TDateProps,
+    TSubmitProps
   >
 ) => {
   const shape = isZodEffects(schema) ? schema._def.schema.shape : schema.shape;
@@ -113,9 +124,36 @@ export const useFormRenderer = <
     return str.charAt(0).toUpperCase() + str.slice(1);
   };
 
-  const controls = Object.entries(shape).reduce((ctrls, [key, value]) => {
-    return { ...ctrls, [capitalize(key)]: mapToRenderer(value, renderers) };
-  }, {} as { [K in Capitalize<TKey>]: TRenderer<TShape[Uncapitalize<K>], TEnumProps, TStringProps, TNumberProps, TBooleanProps, TDateProps> });
+  type Controls = {
+    Submit: RendererMap<
+      TEnumProps,
+      TStringProps,
+      TNumberProps,
+      TBooleanProps,
+      TDateProps,
+      TSubmitProps
+    >["Submit"];
+  } & {
+    [K in Capitalize<TKey>]: TRenderer<
+      TShape[Uncapitalize<K>],
+      TEnumProps,
+      TStringProps,
+      TNumberProps,
+      TBooleanProps,
+      TDateProps,
+      TSubmitProps
+    >;
+  };
+
+  const controls = Object.entries(shape).reduce(
+    (ctrls, [key, value]) => {
+      return { ...ctrls, [capitalize(key)]: mapToRenderer(value, renderers) };
+    },
+    {
+      // Always include the submit button.
+      Submit: renderers.Submit,
+    } as Controls
+  );
 
   return controls;
 };
