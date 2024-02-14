@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { RendererMap } from "./form-renderer";
-import { isBoolean, isEnum, isNumber, isString } from "./typeguards";
+import { isBoolean, isDate, isEnum, isNumber, isString } from "./typeguards";
 
 export type FieldRendererContext = {
   name: string;
@@ -12,14 +12,16 @@ export const mapToRenderer = <
   TEnumProps,
   TStringProps,
   TNumberProps,
-  TBooleanProps
+  TBooleanProps,
+  TDateProps
 >(
   value: TValue,
   rendererMap: RendererMap<
     TEnumProps,
     TStringProps,
     TNumberProps,
-    TBooleanProps
+    TBooleanProps,
+    TDateProps
   >
 ) => {
   const context: FieldRendererContext = {
@@ -29,6 +31,10 @@ export const mapToRenderer = <
 
   if (isEnum(value)) {
     return rendererMap.Enum(context);
+  }
+
+  if (isDate(value)) {
+    return rendererMap.Date(context);
   }
 
   if (isString(value)) {

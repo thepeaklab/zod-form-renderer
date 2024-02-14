@@ -6,14 +6,20 @@ export type FieldRenderer<TProps> = (
   context: FieldRendererContext
 ) => (props: TProps) => React.ReactNode;
 
-export type RendererMap<TEnumProps, TStringProps, TNumberProps, TBooleanProps> =
-  {
-    Enum: FieldRenderer<TEnumProps>;
-    String: FieldRenderer<TStringProps>;
-    Number: FieldRenderer<TNumberProps>;
-    Boolean: FieldRenderer<TBooleanProps>;
-    Default: FieldRenderer<void>;
-  };
+export type RendererMap<
+  TEnumProps,
+  TStringProps,
+  TNumberProps,
+  TBooleanProps,
+  TDateProps
+> = {
+  Enum: FieldRenderer<TEnumProps>;
+  String: FieldRenderer<TStringProps>;
+  Number: FieldRenderer<TNumberProps>;
+  Boolean: FieldRenderer<TBooleanProps>;
+  Date: FieldRenderer<TDateProps>;
+  Default: FieldRenderer<void>;
+};
 
 export type FormRendererProps<
   TShape extends z.ZodRawShape,
@@ -21,17 +27,25 @@ export type FormRendererProps<
   TEnumProps,
   TStringProps,
   TNumberProps,
-  TBooleanProps
+  TBooleanProps,
+  TDateProps
 > = {
   schema: z.ZodObject<TShape> | z.ZodEffects<z.ZodObject<TShape>>;
-  renderers: RendererMap<TEnumProps, TStringProps, TNumberProps, TBooleanProps>;
+  renderers: RendererMap<
+    TEnumProps,
+    TStringProps,
+    TNumberProps,
+    TBooleanProps,
+    TDateProps
+  >;
   children: (controls: {
     [K in Capitalize<TKey>]: TRenderer<
       TShape[Uncapitalize<K>],
       TEnumProps,
       TStringProps,
       TNumberProps,
-      TBooleanProps
+      TBooleanProps,
+      TDateProps
     >;
   }) => React.ReactNode;
 };
@@ -42,7 +56,8 @@ export const FormRenderer = <
   TEnumProps,
   TStringProps,
   TNumberProps,
-  TBooleanProps
+  TBooleanProps,
+  TDateProps
 >({
   schema,
   renderers,
@@ -53,7 +68,8 @@ export const FormRenderer = <
   TEnumProps,
   TStringProps,
   TNumberProps,
-  TBooleanProps
+  TBooleanProps,
+  TDateProps
 >) => {
   const controls = useFormRenderer(schema, renderers);
 

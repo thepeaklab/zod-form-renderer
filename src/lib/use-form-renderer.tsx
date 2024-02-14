@@ -9,14 +9,16 @@ export type TRenderer<
   TEnumProps,
   TStringProps,
   TNumberProps,
-  TBooleanProps
+  TBooleanProps,
+  TDateProps
 > = TValue extends z.ZodOptional<z.ZodTypeAny> | z.ZodNullable<z.ZodTypeAny>
   ? TRenderer<
       TValue["_def"]["innerType"],
       TEnumProps,
       TStringProps,
       TNumberProps,
-      TBooleanProps
+      TBooleanProps,
+      TDateProps
     >
   : TValue extends z.ZodEffects<z.ZodTypeAny>
   ? TRenderer<
@@ -24,11 +26,28 @@ export type TRenderer<
       TEnumProps,
       TStringProps,
       TNumberProps,
-      TBooleanProps
+      TBooleanProps,
+      TDateProps
     >
   : TValue extends z.ZodEnum<[string, ...string[]]>
   ? ReturnType<
-      RendererMap<TEnumProps, TStringProps, TNumberProps, TBooleanProps>["Enum"]
+      RendererMap<
+        TEnumProps,
+        TStringProps,
+        TNumberProps,
+        TBooleanProps,
+        TDateProps
+      >["Enum"]
+    >
+  : TValue extends z.ZodDate
+  ? ReturnType<
+      RendererMap<
+        TEnumProps,
+        TStringProps,
+        TNumberProps,
+        TBooleanProps,
+        TDateProps
+      >["Date"]
     >
   : TValue extends z.ZodType<string>
   ? ReturnType<
@@ -36,7 +55,8 @@ export type TRenderer<
         TEnumProps,
         TStringProps,
         TNumberProps,
-        TBooleanProps
+        TBooleanProps,
+        TDateProps
       >["String"]
     >
   : TValue extends z.ZodType<number>
@@ -45,7 +65,8 @@ export type TRenderer<
         TEnumProps,
         TStringProps,
         TNumberProps,
-        TBooleanProps
+        TBooleanProps,
+        TDateProps
       >["Number"]
     >
   : TValue extends z.ZodType<boolean>
@@ -54,7 +75,8 @@ export type TRenderer<
         TEnumProps,
         TStringProps,
         TNumberProps,
-        TBooleanProps
+        TBooleanProps,
+        TDateProps
       >["Boolean"]
     >
   : ReturnType<
@@ -62,7 +84,8 @@ export type TRenderer<
         TEnumProps,
         TStringProps,
         TNumberProps,
-        TBooleanProps
+        TBooleanProps,
+        TDateProps
       >["Default"]
     >;
 
@@ -72,10 +95,17 @@ export const useFormRenderer = <
   TEnumProps,
   TStringProps,
   TNumberProps,
-  TBooleanProps
+  TBooleanProps,
+  TDateProps
 >(
   schema: z.ZodObject<TShape> | z.ZodEffects<z.ZodObject<TShape>>,
-  renderers: RendererMap<TEnumProps, TStringProps, TNumberProps, TBooleanProps>
+  renderers: RendererMap<
+    TEnumProps,
+    TStringProps,
+    TNumberProps,
+    TBooleanProps,
+    TDateProps
+  >
 ) => {
   const shape = isZodEffects(schema) ? schema._def.schema.shape : schema.shape;
 
@@ -85,7 +115,7 @@ export const useFormRenderer = <
 
   const controls = Object.entries(shape).reduce((ctrls, [key, value]) => {
     return { ...ctrls, [capitalize(key)]: mapToRenderer(value, renderers) };
-  }, {} as { [K in Capitalize<TKey>]: TRenderer<TShape[Uncapitalize<K>], TEnumProps, TStringProps, TNumberProps, TBooleanProps> });
+  }, {} as { [K in Capitalize<TKey>]: TRenderer<TShape[Uncapitalize<K>], TEnumProps, TStringProps, TNumberProps, TBooleanProps, TDateProps> });
 
   return controls;
 };

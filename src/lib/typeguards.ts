@@ -43,3 +43,12 @@ export function isEnum<T extends [string, ...string[]]>(
       isEnum(value._def.schema))
   );
 }
+
+export function isDate(value: z.ZodTypeAny): value is z.ZodDate {
+  return (
+    value &&
+    (value._def.typeName === z.date()._def.typeName ||
+      isDate(value._def.innerType) ||
+      isDate(value._def.schema))
+  );
+}

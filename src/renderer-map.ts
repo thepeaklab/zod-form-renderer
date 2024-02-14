@@ -3,6 +3,10 @@ import {
   CheckboxRenderer,
   CheckboxRendererProps,
 } from "./renderers/checkbox-renderer";
+import {
+  DatepickerRenderer,
+  DatepickerRendererProps,
+} from "./renderers/datepicker-renderer";
 import { InputRenderer, InputRendererProps } from "./renderers/input-renderer";
 import { NullRenderer } from "./renderers/null-renderer";
 import {
@@ -16,11 +20,13 @@ export const fieldRenderers: RendererMap<
   SelectRendererProps,
   InputRendererProps,
   InputRendererProps,
-  CheckboxRendererProps
+  CheckboxRendererProps,
+  DatepickerRendererProps
 > = {
   Enum: SelectRenderer,
   String: InputRenderer,
   Number: InputRenderer,
   Boolean: CheckboxRenderer,
+  Date: DatepickerRenderer,
   Default: NullRenderer,
 };
