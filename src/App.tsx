@@ -55,7 +55,7 @@ export const App = () => {
 
             <Accept label="Accept privacy policy" />
 
-            <Submit />
+            <Submit>Submit</Submit>
           </>
         )}
       </FormRenderer>

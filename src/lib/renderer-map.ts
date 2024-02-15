@@ -49,8 +49,8 @@ export type RendererMap<
  */
 export function createRendererMap<
   // We can use `never` here because we are not interested in the actual renderer props type.
-  T extends RendererMap<never, never, never, never, never, never>
->(map: T): T {
+  TMap extends RendererMap<never, never, never, never, never, never>
+>(map: TMap): TMap {
   // This function is only used for type inference and an easier lib interface.
   return map;
 }
@@ -59,33 +59,33 @@ export function createRendererMap<
  * Returns a field renderer for a given zod type and injects the validation context.
  * If not found, returns the default renderer.
  */
-export const mapToRenderer = <TValue extends z.ZodTypeAny>(
-  value: TValue,
+export const mapToRenderer = <TSchema extends z.ZodTypeAny>(
+  schema: TSchema,
   rendererMap: ReturnType<typeof createRendererMap>
 ) => {
   // This context will be provided to every field renderer.
   const context: FieldRendererContext = {
-    name: value._def.name,
-    schema: value,
+    name: schema._def.name,
+    schema,
   };
 
-  if (isEnum(value)) {
+  if (isEnum(schema)) {
     return rendererMap.Enum(context);
   }
 
-  if (isDate(value)) {
+  if (isDate(schema)) {
     return rendererMap.Date(context);
   }
 
-  if (isString(value)) {
+  if (isString(schema)) {
     return rendererMap.String(context);
   }
 
-  if (isNumber(value)) {
+  if (isNumber(schema)) {
     return rendererMap.Number(context);
   }
 
-  if (isBoolean(value)) {
+  if (isBoolean(schema)) {
     return rendererMap.Boolean(context);
   }
 

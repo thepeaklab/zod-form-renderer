@@ -1,24 +1,23 @@
-import React from "react";
 import { z } from "zod";
 import { RendererMap } from "./renderer-map";
-import { useFormRenderer } from "./use-form-renderer";
+import { TSchema, useFormRenderer } from "./use-form-renderer";
 
-export type FormRendererProps<
+type FormRendererProps<
   TShape extends z.ZodRawShape,
   TKey extends keyof TShape & string,
-  TEnumProps,
   TStringProps,
   TNumberProps,
   TBooleanProps,
+  TEnumProps,
   TDateProps,
   TSubmitProps
 > = {
-  schema: z.ZodObject<TShape> | z.ZodEffects<z.ZodObject<TShape>>;
+  schema: TSchema<TShape>;
   renderers: RendererMap<
-    TEnumProps,
     TStringProps,
     TNumberProps,
     TBooleanProps,
+    TEnumProps,
     TDateProps,
     TSubmitProps
   >;
@@ -28,10 +27,10 @@ export type FormRendererProps<
       typeof useFormRenderer<
         TShape,
         TKey,
-        TEnumProps,
         TStringProps,
         TNumberProps,
         TBooleanProps,
+        TEnumProps,
         TDateProps,
         TSubmitProps
       >
@@ -39,13 +38,21 @@ export type FormRendererProps<
   ) => React.ReactNode;
 };
 
+/**
+ * This components translates a zod validation schema into a set of form controls
+ * by infering the correct renderer for each field type.
+ * Please note, that this only works for primitive types and enums.
+ *
+ * It wraps the controls in a form tag, which can be customized with the formProps prop.
+ * To create a renderer map, use the @see createRendererMap function.
+ */
 export const FormRenderer = <
   TShape extends z.ZodRawShape,
   TKey extends keyof TShape & string,
-  TEnumProps,
   TStringProps,
   TNumberProps,
   TBooleanProps,
+  TEnumProps,
   TDateProps,
   TSubmitProps
 >({
@@ -56,10 +63,10 @@ export const FormRenderer = <
 }: FormRendererProps<
   TShape,
   TKey,
-  TEnumProps,
   TStringProps,
   TNumberProps,
   TBooleanProps,
+  TEnumProps,
   TDateProps,
   TSubmitProps
 >) => {
