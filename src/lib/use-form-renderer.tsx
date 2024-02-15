@@ -1,9 +1,7 @@
 import { z } from "zod";
-import { RendererMap } from "./form-renderer";
-import { mapToRenderer } from "./renderer-mapper";
+import { RendererMap, mapToRenderer } from "./renderer-map";
 import { isZodEffects } from "./typeguards";
 
-// TODO: Reduce the amount of type parameters overhead.
 export type TRenderer<
   TValue,
   TEnumProps,

@@ -1,4 +1,4 @@
-import { createRendererMap } from "./lib/form-renderer";
+import { createRendererMap } from "./lib/renderer-map";
 import { CheckboxRenderer } from "./renderers/checkbox-renderer";
 import { DatepickerRenderer } from "./renderers/datepicker-renderer";
 import { InputRenderer } from "./renderers/input-renderer";

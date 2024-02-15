@@ -1,5 +1,5 @@
 import { ComponentPropsWithRef } from "react";
-import { FieldRendererContext } from "../lib/renderer-mapper";
+import { FieldRendererContext } from "../lib/renderer-map";
 
 export type CheckboxRendererProps = ComponentPropsWithRef<"input"> & {
   label: string;
