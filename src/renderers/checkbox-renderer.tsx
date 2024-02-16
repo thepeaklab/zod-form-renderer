@@ -6,13 +6,13 @@ export type CheckboxRendererProps = ComponentPropsWithRef<"input"> & {
 };
 
 export const CheckboxRenderer =
-  ({ name }: FieldRendererContext) =>
+  ({ name, register }: FieldRendererContext) =>
   (props: CheckboxRendererProps) => {
     const options = { name, type: "checkbox", ...props };
 
     return (
-      <label htmlFor={options.name}>
-        <input {...options} />
+      <label htmlFor={name}>
+        <input id={name} {...register(name)} {...options} />
         {options.label}
       </label>
     );

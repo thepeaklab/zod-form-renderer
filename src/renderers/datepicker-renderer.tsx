@@ -6,7 +6,7 @@ export type DatepickerRendererProps = ComponentPropsWithRef<"input"> & {
 };
 
 export const DatepickerRenderer =
-  ({ name }: FieldRendererContext) =>
+  ({ name, register }: FieldRendererContext) =>
   (userOptions: DatepickerRendererProps) => {
     const options = { name, ...userOptions };
 
@@ -14,7 +14,7 @@ export const DatepickerRenderer =
       <div>
         <label htmlFor={name}>{options.label}</label>
         <br />
-        <input type="date" {...options} />
+        <input id={name} {...register(name)} type="date" {...options} />
       </div>
     );
   };

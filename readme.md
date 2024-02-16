@@ -4,8 +4,7 @@ Auto-infer form fields from zod schema.
 
 ## ToDos
 
-- [ ] NX setup with example apps
-- [ ] Code cleanup and refactoring
+- [x] Add React Hook Form
 - [ ] Unit tests
 - [ ] Documentation
 - [ ] Package release

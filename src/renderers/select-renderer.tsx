@@ -7,15 +7,15 @@ export type SelectRendererProps = ComponentPropsWithRef<"select"> & {
 };
 
 export const SelectRenderer =
-  ({ name }: FieldRendererContext) =>
+  ({ name, register }: FieldRendererContext) =>
   (props: SelectRendererProps) => {
     const options = { name, ...props };
 
     return (
       <div>
-        <label htmlFor={options.name}>{options.label}: </label>
+        <label htmlFor={name}>{options.label}: </label>
         <br />
-        <select {...props}>
+        <select id={name} {...register(name)} {...props}>
           {options.options.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}

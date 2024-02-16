@@ -1,3 +1,4 @@
+import { FieldValues, UseFormRegister } from "react-hook-form";
 import { z } from "zod";
 import { isBoolean, isDate, isEnum, isNumber, isString } from "./typeguards";
 
@@ -7,6 +8,8 @@ export type FieldRendererContext = {
   name: string;
   /** User-defined zod validation schema of the form field. */
   schema: z.ZodTypeAny;
+  /** React-hook-form register function. */
+  register: UseFormRegister<FieldValues>;
 };
 
 /**
@@ -60,14 +63,13 @@ export function createRendererMap<
  * If not found, returns the default renderer.
  */
 export const mapToRenderer = <TSchema extends z.ZodTypeAny>(
+  name: string,
   schema: TSchema,
-  rendererMap: ReturnType<typeof createRendererMap>
+  rendererMap: ReturnType<typeof createRendererMap>,
+  register: UseFormRegister<FieldValues>
 ) => {
   // This context will be provided to every field renderer.
-  const context: FieldRendererContext = {
-    name: schema._def.name,
-    schema,
-  };
+  const context: FieldRendererContext = { name, schema, register };
 
   if (isEnum(schema)) {
     return rendererMap.Enum(context);

@@ -6,18 +6,22 @@ export type InputRendererProps = ComponentPropsWithRef<"input"> & {
 };
 
 export const InputRenderer =
-  ({ name, schema }: FieldRendererContext) =>
-  (userOptions: InputRendererProps) => {
-    const options = { name, ...userOptions };
-
+  ({ name, schema, register }: FieldRendererContext) =>
+  (options: InputRendererProps) => {
     return (
       <div>
         <label htmlFor={name}>
           {options.label}
-          {schema.isOptional() && ` (Optional)`}:{" "}
+          {schema.isOptional() && ` (Optional)`}
         </label>
         <br />
-        <input {...options} />
+        <input
+          id={name}
+          {...options}
+          {...register(name, {
+            valueAsNumber: options.type === "number",
+          })}
+        />
       </div>
     );
   };

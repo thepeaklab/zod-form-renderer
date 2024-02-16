@@ -1,3 +1,10 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  FieldValues,
+  UseFormProps,
+  UseFormRegister,
+  useForm,
+} from "react-hook-form";
 import { z } from "zod";
 import { RendererMap, createRendererMap, mapToRenderer } from "./renderer-map";
 import { isZodEffects } from "./typeguards";
@@ -39,6 +46,7 @@ type TRenderer<
 export const useFormRenderer = <
   TShape extends z.ZodRawShape,
   TKey extends keyof TShape & string,
+  TFormValues extends z.infer<TSchema<TShape>>,
   TStringProps,
   TNumberProps,
   TBooleanProps,
@@ -54,7 +62,8 @@ export const useFormRenderer = <
     TEnumProps,
     TDateProps,
     TSubmitProps
-  >
+  >,
+  useFormProps: UseFormProps<TFormValues> = {}
 ) => {
   // If a schema has effects (.refine(...)), we have to extract the shape.
   const shape = isZodEffects(schema) ? schema._def.schema.shape : schema.shape;
@@ -69,11 +78,23 @@ export const useFormRenderer = <
     [K in Capitalize<TKey>]: TRenderer<TShape[Uncapitalize<K>], TMap>;
   };
 
+  // Set up react hook form with schema validation.
+  const form = useForm<TFormValues>({
+    resolver: zodResolver(schema),
+    ...useFormProps,
+  });
+
   // This is the magic, we map each field to the correct renderer.
   const controls = Object.entries(shape).reduce(
     (ctrls, [field, fieldSchema]) => ({
       ...ctrls,
-      [capitalize(field)]: mapToRenderer(fieldSchema, rendererMap),
+      [capitalize(field)]: mapToRenderer(
+        field,
+        fieldSchema,
+        rendererMap,
+        // Accept any field values from TShape.
+        form.register as UseFormRegister<FieldValues>
+      ),
     }),
     {
       // Always include the submit button.
@@ -81,7 +102,7 @@ export const useFormRenderer = <
     } as Controls
   );
 
-  return controls;
+  return { form, controls };
 };
 
 const capitalize = (str: string) => {

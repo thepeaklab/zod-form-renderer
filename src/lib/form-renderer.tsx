@@ -1,17 +1,25 @@
+import { UseFormProps } from "react-hook-form";
 import { z } from "zod";
 import { RendererMap } from "./renderer-map";
 import { TSchema, useFormRenderer } from "./use-form-renderer";
 
+// We allow all props to be passed through, except for children and onSubmit.
+type NativeFormProps = Omit<
+  React.ComponentPropsWithRef<"form">,
+  "children" | "onSubmit"
+>;
+
 type FormRendererProps<
   TShape extends z.ZodRawShape,
   TKey extends keyof TShape & string,
+  TFormValues extends z.infer<TSchema<TShape>>,
   TStringProps,
   TNumberProps,
   TBooleanProps,
   TEnumProps,
   TDateProps,
   TSubmitProps
-> = {
+> = NativeFormProps & {
   schema: TSchema<TShape>;
   renderers: RendererMap<
     TStringProps,
@@ -21,12 +29,14 @@ type FormRendererProps<
     TDateProps,
     TSubmitProps
   >;
-  formProps?: React.ComponentPropsWithRef<"form">;
+  useFormProps?: UseFormProps<TFormValues>;
+  onSubmit: (data: TFormValues) => void;
   children: (
-    controls: ReturnType<
+    formControls: ReturnType<
       typeof useFormRenderer<
         TShape,
         TKey,
+        TFormValues,
         TStringProps,
         TNumberProps,
         TBooleanProps,
@@ -49,6 +59,7 @@ type FormRendererProps<
 export const FormRenderer = <
   TShape extends z.ZodRawShape,
   TKey extends keyof TShape & string,
+  TFormValues extends z.infer<TSchema<TShape>>,
   TStringProps,
   TNumberProps,
   TBooleanProps,
@@ -58,11 +69,14 @@ export const FormRenderer = <
 >({
   schema,
   renderers,
-  formProps = {},
+  useFormProps = {},
+  onSubmit,
   children,
+  ...rest
 }: FormRendererProps<
   TShape,
   TKey,
+  TFormValues,
   TStringProps,
   TNumberProps,
   TBooleanProps,
@@ -70,7 +84,11 @@ export const FormRenderer = <
   TDateProps,
   TSubmitProps
 >) => {
-  const controls = useFormRenderer(schema, renderers);
+  const { form, controls } = useFormRenderer(schema, renderers, useFormProps);
 
-  return <form {...formProps}>{children(controls)}</form>;
+  return (
+    <form {...rest} onSubmit={form.handleSubmit(onSubmit)}>
+      {children({ form, controls })}
+    </form>
+  );
 };

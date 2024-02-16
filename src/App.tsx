@@ -7,15 +7,15 @@ export const App = () => {
   const schema = z.object({
     title: z.enum(["Mr", "Mrs", "Miss", "Dr", "Prof"]),
     name: z.string(),
-    email: z
-      .string()
-      .email()
-      .refine((s) => s.endsWith(".de")),
-    web: z.string().url().optional().nullable(),
-    birthday: z.date(),
+    // email: z
+    //   .string()
+    //   .email()
+    //   .refine((s) => s.endsWith(".de")),
+    // web: z.string().url().optional().nullable(),
+    // birthday: z.date(),
     age: z.number(),
-    // Infering custom types is not possible, because they are of type ZodAny.
-    avatar: z.custom<File>().refine((file) => file.type.endsWith(".png")),
+    // // Infering custom types is not possible, because they are of type ZodAny.
+    // avatar: z.custom<File>().refine((file) => file.type.endsWith(".png")),
     accept: z.boolean(),
   });
 
@@ -24,12 +24,18 @@ export const App = () => {
   });
 
   // When needed, you can also use a hook.
-  const { Age } = useFormRenderer(schema, fieldRenderers);
+  useFormRenderer(schema, fieldRenderers);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", rowGap: "2rem" }}>
-      <FormRenderer schema={schemaWithEffects} renderers={fieldRenderers}>
-        {({ Title, Name, Email, Web, Birthday, Accept, Submit }) => (
+      <FormRenderer
+        schema={schemaWithEffects}
+        renderers={fieldRenderers}
+        onSubmit={(data) => {
+          console.log(data);
+        }}
+      >
+        {({ controls: { Title, Name, Age, Accept, Submit } }) => (
           <>
             <Title
               label="Title"
@@ -42,11 +48,11 @@ export const App = () => {
               ]}
             />
             <Name label="Name" />
-            <Email label="Email" />
-            <Web label="Url" />
-            <Age label="Age" />
+            <Age label="Age" type="number" />
 
-            <Birthday label="Birthday" />
+            {/* <Email label="Email" />
+            <Web label="Url" />
+            <Birthday label="Birthday" /> */}
 
             {/* Inserting custom fields is always possible. */}
             <label htmlFor={"avatar"}>
