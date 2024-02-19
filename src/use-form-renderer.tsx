@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   FieldValues,
   UseFormProps,
-  UseFormRegister,
+  UseFormReturn,
   useForm,
 } from "react-hook-form";
 import { z } from "zod";
@@ -93,7 +93,7 @@ export const useFormRenderer = <
         fieldSchema,
         rendererMap,
         // Accept any field values from TShape.
-        form.register as UseFormRegister<FieldValues>
+        form as UseFormReturn<FieldValues>
       ),
     }),
     {

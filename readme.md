@@ -5,6 +5,6 @@ Auto-infer form fields from zod schema.
 ## ToDos
 
 - [x] Add React Hook Form
-- [ ] Unit tests
+- [x] Unit tests
 - [ ] Documentation
-- [ ] Package release
+- [ ] Package release (+ workflow)

@@ -21,7 +21,7 @@ type FormRendererProps<
   TSubmitProps
 > = NativeFormProps & {
   schema: TSchema<TShape>;
-  renderers: RendererMap<
+  rendererMap: RendererMap<
     TStringProps,
     TNumberProps,
     TBooleanProps,
@@ -68,7 +68,7 @@ export const FormRenderer = <
   TSubmitProps
 >({
   schema,
-  renderers,
+  rendererMap,
   useFormProps = {},
   onSubmit,
   children,
@@ -84,7 +84,7 @@ export const FormRenderer = <
   TDateProps,
   TSubmitProps
 >) => {
-  const { form, controls } = useFormRenderer(schema, renderers, useFormProps);
+  const { form, controls } = useFormRenderer(schema, rendererMap, useFormProps);
 
   return (
     <form {...rest} onSubmit={form.handleSubmit(onSubmit)}>

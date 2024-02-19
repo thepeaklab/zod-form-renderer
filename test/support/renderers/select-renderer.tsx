@@ -1,5 +1,5 @@
 import { ComponentPropsWithRef } from "react";
-import { FieldRendererContext } from "../lib/renderer-map";
+import { FieldRendererContext } from "../../../src/renderer-map";
 
 export type SelectRendererProps = ComponentPropsWithRef<"select"> & {
   label: string;
@@ -7,16 +7,14 @@ export type SelectRendererProps = ComponentPropsWithRef<"select"> & {
 };
 
 export const SelectRenderer =
-  ({ name, register }: FieldRendererContext) =>
+  ({ name, form }: FieldRendererContext) =>
   (props: SelectRendererProps) => {
-    const options = { name, ...props };
-
     return (
       <div>
-        <label htmlFor={name}>{options.label}: </label>
+        <label htmlFor={name}>{props.label}: </label>
         <br />
-        <select id={name} {...register(name)} {...props}>
-          {options.options.map((option) => (
+        <select id={name} {...form.register(name)} {...props}>
+          {props.options.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
             </option>

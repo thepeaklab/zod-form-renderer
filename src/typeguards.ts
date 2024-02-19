@@ -3,7 +3,12 @@ import { z } from "zod";
 export function isZodEffects<T extends z.ZodTypeAny>(
   value: z.ZodTypeAny
 ): value is z.ZodEffects<T> {
-  return value._def.typeName === "ZodEffects";
+  return (
+    value &&
+    (value._def.typeName === "ZodEffects" ||
+      isZodEffects(value._def.innerType) ||
+      isZodEffects(value._def.schema))
+  );
 }
 
 export function isString(value: z.ZodTypeAny): value is z.ZodString {
