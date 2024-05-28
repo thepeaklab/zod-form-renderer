@@ -1,6 +1,4 @@
 import { z } from "zod";
-import { FormRenderer } from "../../../src";
-import { rendererMap } from "../renderer-map";
 
 export const complex = z.object({
   title: z.enum(["", "Dr.", "Prof."]).optional(),
@@ -13,33 +11,3 @@ export const complex = z.object({
 export const complexWithEffects = complex.refine((data) => {
   return data.birthday !== null || data.age !== null;
 });
-
-export const ComplexForm = ({
-  onSubmit,
-}: {
-  onSubmit: (d: z.infer<typeof complex>) => void;
-}) => (
-  <FormRenderer
-    schema={complexWithEffects}
-    rendererMap={rendererMap}
-    onSubmit={onSubmit}
-  >
-    {({ controls: { Title, Name, Birthday, Age, Accept, Submit } }) => (
-      <>
-        <Title
-          label="Title"
-          options={[
-            { value: "", label: "None" },
-            { value: "Dr.", label: "Dr." },
-            { value: "Prof.", label: "Prof." },
-          ]}
-        />
-        <Name label="Name" />
-        <Birthday label="Birthday" />
-        <Age label="Age" />
-        <Accept label="Accept" />
-        <Submit>Submit</Submit>
-      </>
-    )}
-  </FormRenderer>
-);

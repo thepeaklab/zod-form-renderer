@@ -1,6 +1,7 @@
+import React from "react";
 import { UseFormProps } from "react-hook-form";
 import { z } from "zod";
-import { RendererMap } from "./renderer-map";
+import { FieldRenderer, RendererMap } from "./renderer-map";
 import { TSchema, useFormRenderer } from "./use-form-renderer";
 
 // We allow all props to be passed through, except for children and onSubmit.
@@ -12,7 +13,7 @@ type NativeFormProps = Omit<
 type FormRendererProps<
   TShape extends z.ZodRawShape,
   TKey extends keyof TShape & string,
-  TFormValues extends z.infer<TSchema<TShape>>,
+  TCustomKey extends keyof TShape & string,
   TStringProps,
   TNumberProps,
   TBooleanProps,
@@ -21,7 +22,7 @@ type FormRendererProps<
   TSubmitProps
 > = NativeFormProps & {
   schema: TSchema<TShape>;
-  rendererMap: RendererMap<
+  typeRendererMap: RendererMap<
     TStringProps,
     TNumberProps,
     TBooleanProps,
@@ -29,14 +30,19 @@ type FormRendererProps<
     TDateProps,
     TSubmitProps
   >;
-  useFormProps?: UseFormProps<TFormValues>;
-  onSubmit: (data: TFormValues) => void;
+  fieldRendererMap?: Partial<{
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    [K in TCustomKey]: FieldRenderer<any>;
+  }>;
+  useFormProps?: UseFormProps<z.infer<TSchema<TShape>>>;
+  onSubmit: (data: z.infer<TSchema<TShape>>) => void;
   children: (
     formControls: ReturnType<
       typeof useFormRenderer<
         TShape,
         TKey,
-        TFormValues,
+        TCustomKey,
+        z.infer<TSchema<TShape>>,
         TStringProps,
         TNumberProps,
         TBooleanProps,
@@ -50,16 +56,16 @@ type FormRendererProps<
 
 /**
  * This components translates a zod validation schema into a set of form controls
- * by infering the correct renderer for each field type.
+ * by inferring the correct renderer for each field type.
  * Please note, that this only works for primitive types and enums.
  *
  * It wraps the controls in a form tag, which can be customized with the formProps prop.
- * To create a renderer map, use the @see createRendererMap function.
+ * To create a type renderer map, use the @see createRendererMap function.
  */
 export const FormRenderer = <
   TShape extends z.ZodRawShape,
   TKey extends keyof TShape & string,
-  TFormValues extends z.infer<TSchema<TShape>>,
+  TCustomKey extends keyof TShape & string,
   TStringProps,
   TNumberProps,
   TBooleanProps,
@@ -68,7 +74,8 @@ export const FormRenderer = <
   TSubmitProps
 >({
   schema,
-  rendererMap,
+  typeRendererMap,
+  fieldRendererMap = {},
   useFormProps = {},
   onSubmit,
   children,
@@ -76,7 +83,7 @@ export const FormRenderer = <
 }: FormRendererProps<
   TShape,
   TKey,
-  TFormValues,
+  TCustomKey,
   TStringProps,
   TNumberProps,
   TBooleanProps,
@@ -84,7 +91,12 @@ export const FormRenderer = <
   TDateProps,
   TSubmitProps
 >) => {
-  const { form, controls } = useFormRenderer(schema, rendererMap, useFormProps);
+  const { form, controls } = useFormRenderer(
+    schema,
+    typeRendererMap,
+    fieldRendererMap,
+    useFormProps
+  );
 
   return (
     <form {...rest} onSubmit={form.handleSubmit(onSubmit)}>

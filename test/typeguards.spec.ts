@@ -1,5 +1,3 @@
-import { describe, expect, it } from "vitest";
-import { z } from "zod";
 import {
   isBoolean,
   isDate,
@@ -7,7 +5,9 @@ import {
   isNumber,
   isString,
   isZodEffects,
-} from "../src/typeguards";
+} from "@src/typeguards";
+import { describe, expect, it } from "vitest";
+import { z } from "zod";
 
 describe("Typeguards", () => {
   describe("isZodEffects", () => {

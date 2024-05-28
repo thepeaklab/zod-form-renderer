@@ -9,4 +9,10 @@ export default defineConfig({
     globals: true,
     environment: "happy-dom",
   },
+  resolve: {
+    alias: {
+      "@src": "/src",
+      "@test": "/test",
+    },
+  },
 });

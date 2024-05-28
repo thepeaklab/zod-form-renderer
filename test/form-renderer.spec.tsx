@@ -1,9 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
-import { ComplexForm } from "./support/schemas/complex";
-import { CustomForm, NonPrimitiveForm } from "./support/schemas/custom";
-import { PrimitivesForm } from "./support/schemas/primitives";
+import { ComplexForm } from "./support/forms/complex";
+import { CustomForm, NonPrimitiveForm } from "./support/forms/custom";
+import { PrimitivesForm } from "./support/forms/primitives";
 
 describe("FormRenderer / useFormRenderer", () => {
   it("should render form fields for primitive types", () => {

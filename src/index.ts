@@ -1,3 +1,7 @@
+export { useFieldRendererContext } from "./context";
 export { FormRenderer } from "./form-renderer";
-export * from "./renderer-map";
-export * from "./typeguards";
+export {
+  createRendererMap,
+  type FieldRenderer,
+  type RendererMap,
+} from "./renderer-map";

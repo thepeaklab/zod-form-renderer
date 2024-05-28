@@ -1,33 +1,19 @@
-import { FieldValues, UseFormReturn } from "react-hook-form";
+import React from "react";
 import { z } from "zod";
 import { isBoolean, isDate, isEnum, isNumber, isString } from "./typeguards";
 
-/** This context will be provided to any field renderer. */
-export type FieldRendererContext = {
-  /** User-defined name of the form field. */
-  name: string;
-  /** User-defined zod validation schema of the form field. */
-  schema: z.ZodTypeAny;
-  /** React-hook-form context. */
-  form: UseFormReturn<FieldValues>;
-};
-
 /**
- * The user has to define a matching field renderer for every supported zod type.
- * It receives a validation context and returns any form field component.
+ * The consumer has to define a matching field renderer for every supported zod type.
+ * As an interface, we require a generic React component.
  */
-export type FieldRenderer<TProps> = (
-  context: FieldRendererContext
-) => (props: TProps) => React.ReactNode;
+export type FieldRenderer<TProps> = (props: TProps) => React.ReactNode;
 
 /**
  * This renderer map is used to map supported zod types to field renderers.
  * The user has to define a matching field renderer for every supported zod type.
  * Additionally, a default renderer and a submit button are required.
  *
- * The typing looks a bit verbose, but it is necessary to infer the correct
- * props for each field renderer.
- * Use @see createRendererMap to avoid manual typing.
+ * Use @see createRendererMap to avoid manual props typing.
  */
 export type RendererMap<
   TStringProps,
@@ -59,37 +45,32 @@ export function createRendererMap<
 }
 
 /**
- * Returns a field renderer for a given zod type and injects the validation context.
+ * Returns a field renderer for a given zod type.
  * If not found, returns the default renderer.
  */
-export const mapToRenderer = <TSchema extends z.ZodTypeAny>(
-  name: string,
-  schema: TSchema,
-  rendererMap: ReturnType<typeof createRendererMap>,
-  form: UseFormReturn<FieldValues>
+export const mapToTypeRenderer = (
+  schema: z.ZodTypeAny,
+  rendererMap: ReturnType<typeof createRendererMap>
 ) => {
-  // This context will be provided to every field renderer.
-  const context: FieldRendererContext = { name, schema, form };
-
   if (isEnum(schema)) {
-    return rendererMap.Enum(context);
+    return rendererMap.Enum;
   }
 
   if (isDate(schema)) {
-    return rendererMap.Date(context);
+    return rendererMap.Date;
   }
 
   if (isString(schema)) {
-    return rendererMap.String(context);
+    return rendererMap.String;
   }
 
   if (isNumber(schema)) {
-    return rendererMap.Number(context);
+    return rendererMap.Number;
   }
 
   if (isBoolean(schema)) {
-    return rendererMap.Boolean(context);
+    return rendererMap.Boolean;
   }
 
-  return rendererMap.Default(context);
+  return rendererMap.Default;
 };
