@@ -84,7 +84,7 @@ describe("FormRenderer / useFormRenderer", () => {
     expect(screen.getByText(/at least 3 character/)).toBeDefined();
   });
 
-  it.only("should run onSubmit when the form is submitted", async () => {
+  it("should run onSubmit when the form is submitted", async () => {
     const user = userEvent.setup();
 
     const mockSubmit = vi.fn((values) => {
