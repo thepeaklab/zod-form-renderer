@@ -2,9 +2,25 @@
   <img width="300px" src="./logo.png" style="max-width:100%;">
 </p>
 
-# Zod Form Renderer
+# Zod Form Renderer <!-- omit from toc -->
 
-Auto-infer form fields from [zod](https://zod.dev/) schema.
+Auto-infer form fields from [zod](https://zod.dev/) schema and render them with [react-hook-form](https://www.react-hook-form.com/).
+
+## Table of Contents <!-- omit from toc -->
+
+- [Installation](#installation)
+- [Documentation](#documentation)
+  - [Creating a zod schema](#creating-a-zod-schema)
+  - [Creating a field renderer](#creating-a-field-renderer)
+  - [Setting up a type renderer map](#setting-up-a-type-renderer-map)
+  - [Setting up a FormRenderer instance](#setting-up-a-formrenderer-instance)
+  - [Using react-hook-form options](#using-react-hook-form-options)
+  - [Overwriting default form fields](#overwriting-default-form-fields)
+- [Contributing](#contributing)
+  - [Code of Conduct](#code-of-conduct)
+  - [Want to help?](#want-to-help)
+  - [Security](#security)
+  - [License](#license)
 
 ## Installation
 
@@ -29,7 +45,7 @@ Start by creating your zod validation schema.
 
 ```ts
 export const mySchema = z.object({
-  title: z.enum(["", "Dr.", "Prof."]),
+  title: z.enum(['', 'Dr.', 'Prof.']),
   name: z.string(),
   birthday: z.coerce.date(),
   age: z.number(),
@@ -44,11 +60,11 @@ As you can see, a schema may contain different zod types. We will use these to c
 To give you an example, we use a simple `TextInputRenderer` for zod strings.
 
 ```tsx
-import { ComponentPropsWithRef } from "react";
-import { useFieldRendererContext } from "zod-form-renderer";
+import { ComponentPropsWithRef } from 'react';
+import { useFieldRendererContext } from 'zod-form-renderer';
 
 // Use input props as for any React component
-export type TextRendererProps = ComponentPropsWithRef<"input"> & {
+export type TextRendererProps = ComponentPropsWithRef<'input'> & {
   label: string;
 };
 
@@ -70,7 +86,7 @@ export const TextRenderer = (props: TextRendererProps) => {
 
       <input id={name} {...form.register(name)} {...props} />
       <br />
-      <p style={{ color: "red" }}>{error?.message?.toString()}</p>
+      <p style={{ color: 'red' }}>{error?.message?.toString()}</p>
     </div>
   );
 };
@@ -84,7 +100,7 @@ Use `type="number"` for `z.number()` types or `<select />` for `z.enum()`. Furth
 Once you have defined field renderers for all zod primitive types, combine them in a map.
 
 ```ts
-import { createRendererMap } from "zod-form-renderer";
+import { createRendererMap } from 'zod-form-renderer';
 
 // Provide renderers for all these required types
 export const myRendererMap = createRendererMap({
@@ -103,7 +119,7 @@ export const myRendererMap = createRendererMap({
 Now you're ready to set up your first form renderer instance.
 
 ```tsx
-import { FormRenderer } from "zod-form-renderer";
+import { FormRenderer } from 'zod-form-renderer';
 
 <FormRenderer
   schema={mySchema}
@@ -112,7 +128,7 @@ import { FormRenderer } from "zod-form-renderer";
     // Under the hood, react-hook-form is used.
     // Apply any form behavior you'd like
     defaultValues: {
-      name: "John Doe",
+      name: 'John Doe',
     },
   }}
   onSubmit={(values) => {
@@ -124,9 +140,9 @@ import { FormRenderer } from "zod-form-renderer";
       <Title
         label="My Title"
         options={[
-          { value: "", label: "None" },
-          { value: "Dr.", label: "Dr." },
-          { value: "Prof.", label: "Prof." },
+          { value: '', label: 'None' },
+          { value: 'Dr.', label: 'Dr.' },
+          { value: 'Prof.', label: 'Prof.' },
         ]}
       />
       <Name label="My Name" />
@@ -155,7 +171,7 @@ The `<FormRenderer />` also returns a reference to the hook-form, so you have ac
     },
     form,
   }) => {
-    const hasAccepted = form.watch("accept");
+    const hasAccepted = form.watch('accept');
 
     return (
       <>
