@@ -66,6 +66,9 @@ export const App = () => {
       fieldRendererMap={{
         avatar: AvatarRenderer,
       }}
+      useFormProps={{
+        mode: "onBlur",
+      }}
       onSubmit={(data, form) => {
         console.log(data);
         form.reset();
