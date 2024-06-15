@@ -1,5 +1,5 @@
 import React from "react";
-import { UseFormProps } from "react-hook-form";
+import { UseFormProps, UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 import { FieldRenderer, RendererMap } from "./renderer-map";
 import { TSchema, useFormRenderer } from "./use-form-renderer";
@@ -35,7 +35,10 @@ type FormRendererProps<
     [K in TCustomKey]: FieldRenderer<any>;
   }>;
   useFormProps?: UseFormProps<z.infer<TSchema<TShape>>>;
-  onSubmit: (data: z.infer<TSchema<TShape>>) => void;
+  onSubmit: (
+    data: z.infer<TSchema<TShape>>,
+    form: UseFormReturn<z.infer<TSchema<TShape>>>
+  ) => void;
   children: (
     formControls: ReturnType<
       typeof useFormRenderer<
@@ -99,7 +102,10 @@ export const FormRenderer = <
   );
 
   return (
-    <form {...rest} onSubmit={form.handleSubmit(onSubmit)}>
+    <form
+      {...rest}
+      onSubmit={form.handleSubmit((data) => onSubmit(data, form))}
+    >
       {children({ form, controls })}
     </form>
   );

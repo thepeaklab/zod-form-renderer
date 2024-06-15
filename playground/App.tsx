@@ -66,8 +66,9 @@ export const App = () => {
       fieldRendererMap={{
         avatar: AvatarRenderer,
       }}
-      onSubmit={(data) => {
+      onSubmit={(data, form) => {
         console.log(data);
+        form.reset();
       }}
       style={{
         display: "flex",
