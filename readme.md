@@ -4,7 +4,7 @@
 
 # Zod Form Renderer <!-- omit from toc -->
 
-Auto-infer form fields from [zod](https://zod.dev/) schema and render them with [react-hook-form](https://www.react-hook-form.com/).
+Auto-infer form fields from [zod](https://zod.dev/) schema and render them with [react-hook-form](https://www.react-hook-form.com/) with E2E type safety.
 
 ## Table of Contents <!-- omit from toc -->
 
@@ -34,7 +34,7 @@ The zod form renderer uses the zod type inference to map schema properties to fo
 
 This library might be useful to you, if you
 
-- [ ] use zod and react-hook-form
+- [ ] use [zod](https://zod.dev/) and [react-hook-form](https://react-hook-form.com/)
 - [ ] know your zod schema at build time
 - [ ] have multiple forms in your application
 - [ ] want a clean forms API without any `formik` or `react-hook-form` clutter.
