@@ -12,12 +12,12 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "test": "vitest"
   },
-  "dependencies": {
-    "@hookform/resolvers": "^3.3.4",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-hook-form": "^7.50.1",
-    "zod": "^3.22.4"
+  "peerDependencies": {
+    "@hookform/resolvers": "3.x",
+    "react": "18.x",
+    "react-dom": "18.x",
+    "react-hook-form": "7.x",
+    "zod": "3.x"
   },
   "devDependencies": {
     "@testing-library/react": "^14.2.1",
