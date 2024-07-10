@@ -2,6 +2,19 @@
   "name": "zod-form-renderer",
   "description": "Render form controls from zod schema",
   "author": "thepeaklab",
+  "homepage": "https://github.com/thepeaklab/zod-form-renderer",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thepeaklab/zod-form-renderer"
+  },
+  "keywords": [
+    "zod",
+    "react",
+    "react-hook-form",
+    "form",
+    "form-renderer",
+    "validation"
+  ],
   "license": "MIT",
   "version": "1.0.0-rc1",
   "type": "module",
