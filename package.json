@@ -1,11 +1,12 @@
 {
   "name": "zod-form-renderer",
   "description": "Render form controls from zod schema",
+  "version": "0.0.0",
   "author": "thepeaklab",
   "homepage": "https://github.com/thepeaklab/zod-form-renderer",
   "repository": {
     "type": "git",
-    "url": "https://github.com/thepeaklab/zod-form-renderer"
+    "url": "git+https://github.com/thepeaklab/zod-form-renderer.git"
   },
   "keywords": [
     "zod",
@@ -16,8 +17,19 @@
     "validation"
   ],
   "license": "MIT",
-  "version": "1.0.0-rc1",
   "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.cjs.js"
+    }
+  },
+  "main": "./dist/index.cjs.js",
+  "module": "./dist/index.es.js",
+  "typings": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "start": "vite",
     "build": "tsc && vite build",
@@ -32,8 +44,10 @@
     "zod": "3.x"
   },
   "devDependencies": {
+    "@rollup/plugin-typescript": "^11.1.6",
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.5.2",
+    "@types/node": "^20.14.10",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "@typescript-eslint/eslint-plugin": "^6.14.0",
@@ -43,6 +57,8 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
     "happy-dom": "^13.3.5",
+    "rollup-plugin-typescript-paths": "^1.5.0",
+    "tslib": "^2.6.3",
     "typescript": "^5.2.2",
     "vite": "^5.0.8",
     "vitest": "^2.0.0"
