@@ -25,7 +25,7 @@ Auto-infer form fields from [zod](https://zod.dev/) schema and render them with 
 ## Installation
 
 ```sh
-npm install -S zod-form-renderer
+npm install -S zod-form-renderer zod react-hook-form @hookform/resolvers
 ```
 
 ## Documentation
@@ -34,10 +34,14 @@ The zod form renderer uses the zod type inference to map schema properties to fo
 
 This library might be useful to you, if you
 
+- [ ] use [TypeScript](https://www.typescriptlang.org/)
 - [ ] use [zod](https://zod.dev/) and [react-hook-form](https://react-hook-form.com/)
 - [ ] know your zod schema at build time
 - [ ] have multiple forms in your application
+- [ ] want type-safe form fields
 - [ ] want a clean forms API without any `formik` or `react-hook-form` clutter.
+
+> Make sure you have `"strict": true"` in your `tsconfig.json`!
 
 ### Creating a zod schema
 
@@ -149,7 +153,7 @@ import { FormRenderer } from 'zod-form-renderer';
       <Birthday label="My Birthday" />
       <Age label="My Age" />
       <Accept label="I Accept" />
-      <Submit>Let's go!</Submit>
+      <Submit>{"Let's go!"}</Submit>
     </>
   )}
 </FormRenderer>;

@@ -1,15 +1,17 @@
-import { useFieldRendererContext } from "@src/context";
-import { FormRenderer } from "@src/form-renderer";
-import { createRendererMap } from "@src/renderer-map";
-import { CheckboxRenderer } from "@test/support/renderers/renderer-checkbox";
-import { DatepickerRenderer } from "@test/support/renderers/renderer-datepicker";
-import { DefaultRenderer } from "@test/support/renderers/renderer-default";
-import { NumberRenderer } from "@test/support/renderers/renderer-number";
-import { SelectRenderer } from "@test/support/renderers/renderer-select";
-import { SubmitButton } from "@test/support/renderers/renderer-submit";
-import { TextRenderer } from "@test/support/renderers/renderer-text";
-import { Controller } from "react-hook-form";
-import { z } from "zod";
+import {
+  FormRenderer,
+  createRendererMap,
+  useFieldRendererContext,
+} from '@src/index';
+import { CheckboxRenderer } from '@test/support/renderers/renderer-checkbox';
+import { DatepickerRenderer } from '@test/support/renderers/renderer-datepicker';
+import { DefaultRenderer } from '@test/support/renderers/renderer-default';
+import { NumberRenderer } from '@test/support/renderers/renderer-number';
+import { SelectRenderer } from '@test/support/renderers/renderer-select';
+import { SubmitButton } from '@test/support/renderers/renderer-submit';
+import { TextRenderer } from '@test/support/renderers/renderer-text';
+import { Controller } from 'react-hook-form';
+import { z } from 'zod';
 
 const rendererMap = createRendererMap({
   Enum: SelectRenderer,
@@ -43,14 +45,14 @@ const AvatarRenderer = () => {
 };
 
 const schema = z.object({
-  title: z.enum(["", "Dr.", "Prof."]).optional(),
+  title: z.enum(['', 'Dr.', 'Prof.']).optional(),
   name: z.string().min(3).max(30),
   birthday: z.coerce.date().max(new Date()).nullable(),
   age: z.number().min(18).nullable(),
   avatar: z
     .custom<File>()
     .optional()
-    .refine((file) => file?.type?.endsWith("png")),
+    .refine((file) => file?.type?.endsWith('png')),
   accept: z.boolean().refine((b) => b === true),
 });
 
@@ -67,30 +69,28 @@ export const App = () => {
         avatar: AvatarRenderer,
       }}
       useFormProps={{
-        mode: "onBlur",
+        mode: 'onBlur',
       }}
       onSubmit={(data, form) => {
         console.log(data);
         form.reset();
       }}
       style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        fontFamily: "sans-serif",
-        rowGap: "2rem",
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        fontFamily: 'sans-serif',
+        rowGap: '2rem',
       }}
     >
-      {({
-        controls: { Title, Name, Birthday, Age, Avatar, Accept, Submit },
-      }) => (
+      {({ controls: { Title, Name, Birthday, Age, Avatar, Accept } }) => (
         <>
           <Title
             label="Title"
             options={[
-              { value: "", label: "None" },
-              { value: "Dr.", label: "Dr." },
-              { value: "Prof.", label: "Prof." },
+              { value: '', label: 'None' },
+              { value: 'Dr.', label: 'Dr.' },
+              { value: 'Prof.', label: 'Prof.' },
             ]}
           />
           <Name label="Name" />
@@ -102,7 +102,7 @@ export const App = () => {
 
           <Accept label="Accept privacy policy" />
 
-          <Submit>Submit</Submit>
+          {/* <Submit>Submit</Submit> */}
         </>
       )}
     </FormRenderer>
