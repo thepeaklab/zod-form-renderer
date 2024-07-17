@@ -113,7 +113,7 @@ describe("FormRenderer / useFormRenderer", () => {
 
     await user.click(getByText(/Submit/));
 
-    expect(mockSubmit).toHaveReturnedWith({
+    expect(mockSubmit).toHaveResolvedWith({
       title: "Dr.",
       name: "Jane Doe",
       birthday: new Date("2024-01-18"),
@@ -138,7 +138,7 @@ describe("FormRenderer / useFormRenderer", () => {
 
     await user.click(getByText(/Submit/));
 
-    expect(mockSubmit).toHaveReturnedWith({
+    expect(mockSubmit).toHaveResolvedWith({
       profileImage: file,
     });
   });

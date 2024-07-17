@@ -12,12 +12,7 @@ export const DatepickerRenderer = (props: DatepickerRendererProps) => {
     <div>
       <label htmlFor={name}>{props.label}</label>
       <br />
-      <input
-        id={name}
-        type="date"
-        {...form.register(name, { valueAsDate: true })}
-        {...props}
-      />
+      <input id={name} type="date" {...form.register(name)} {...props} />
     </div>
   );
 };
