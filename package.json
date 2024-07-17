@@ -1,7 +1,7 @@
 {
   "name": "zod-form-renderer",
   "description": "Render form controls from zod schema",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": "thepeaklab",
   "homepage": "https://github.com/thepeaklab/zod-form-renderer",
   "repository": {
