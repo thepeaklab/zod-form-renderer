@@ -20,7 +20,7 @@
   "type": "module",
   "main": "./src/index.ts",
   "files": [
-    "src"
+    "dist"
   ],
   "scripts": {
     "start": "vite",
