@@ -83,7 +83,9 @@ export const App = () => {
         rowGap: '2rem',
       }}
     >
-      {({ controls: { Title, Name, Birthday, Age, Avatar, Accept } }) => (
+      {({
+        controls: { Title, Name, Birthday, Age, Avatar, Accept, Submit },
+      }) => (
         <>
           <Title
             label="Title"
@@ -102,7 +104,7 @@ export const App = () => {
 
           <Accept label="Accept privacy policy" />
 
-          {/* <Submit>Submit</Submit> */}
+          <Submit>Submit</Submit>
         </>
       )}
     </FormRenderer>
