@@ -1,20 +1,20 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import { zodResolver } from '@hookform/resolvers/zod';
+import React from 'react';
 import {
   FieldValues,
   UseFormProps,
   UseFormReturn,
   useForm,
-} from "react-hook-form";
-import { z } from "zod";
-import { FieldContext } from "./context";
+} from 'react-hook-form';
+import { z } from 'zod';
+import { FieldContext } from './context';
 import {
   FieldRenderer,
   RendererMap,
   createRendererMap,
   mapToTypeRenderer,
-} from "./renderer-map";
-import { isZodEffects } from "./typeguards";
+} from './renderer-map';
+import { isZodEffects } from './typeguards';
 
 /** Generic zod input schema. */
 export type TSchema<TShape extends z.ZodRawShape> =
@@ -29,20 +29,20 @@ export type TRenderer<
   TValue,
   TMap extends ReturnType<typeof createRendererMap>
 > = TValue extends z.ZodOptional<z.ZodTypeAny> | z.ZodNullable<z.ZodTypeAny>
-  ? TRenderer<TValue["_def"]["innerType"], TMap>
+  ? TRenderer<TValue['_def']['innerType'], TMap>
   : TValue extends z.ZodEffects<z.ZodTypeAny>
-  ? TRenderer<TValue["_def"]["schema"], TMap>
+  ? TRenderer<TValue['_def']['schema'], TMap>
   : TValue extends z.ZodEnum<[string, ...string[]]>
-  ? TMap["Enum"]
+  ? TMap['Enum']
   : TValue extends z.ZodDate
-  ? TMap["Date"]
+  ? TMap['Date']
   : TValue extends z.ZodType<string>
-  ? TMap["String"]
+  ? TMap['String']
   : TValue extends z.ZodType<number>
-  ? TMap["Number"]
+  ? TMap['Number']
   : TValue extends z.ZodType<boolean>
-  ? TMap["Boolean"]
-  : TMap["Default"];
+  ? TMap['Boolean']
+  : TMap['Default'];
 
 /**
  * This hook translates a zod validation schema into a set of form controls
@@ -53,9 +53,9 @@ export type TRenderer<
  */
 export const useFormRenderer = <
   TShape extends z.ZodRawShape,
-  TKey extends keyof TShape & string,
   TCustomKey extends keyof TShape & string,
   TFormValues extends z.infer<TSchema<TShape>>,
+  TControls,
   TStringProps,
   TNumberProps,
   TBooleanProps,
@@ -81,25 +81,10 @@ export const useFormRenderer = <
   // If a schema has effects (.refine(...)), we have to extract the shape.
   const shape = isZodEffects(schema) ? schema._def.schema.shape : schema.shape;
 
-  // Setup some helper types to make the return type more readable.
-  type TMap = typeof typeRendererMap;
-  type TFieldMap = typeof fieldRendererMap;
-
-  // For our returned controls type, we also add the submit button.
-  type Controls = {
-    Submit: TMap["Submit"];
-  } & {
-    [K in Capitalize<TKey>]: Uncapitalize<K> extends keyof TFieldMap
-      ? TFieldMap[Uncapitalize<K>] extends never
-        ? never
-        : <TProps>(props: TProps) => React.ReactNode
-      : TRenderer<TShape[Uncapitalize<K>], TMap>;
-  };
-
   // Set up react hook form with schema validation.
   const form = useForm<TFormValues>({
-    mode: "onBlur",
-    reValidateMode: "onChange",
+    mode: 'onBlur',
+    reValidateMode: 'onChange',
     resolver: zodResolver(schema),
     ...useFormProps,
   });
@@ -145,7 +130,7 @@ export const useFormRenderer = <
     {
       // Always include the submit button.
       Submit: typeRendererMap.Submit,
-    } as Controls
+    } as TControls
   );
 
   return { form, controls };

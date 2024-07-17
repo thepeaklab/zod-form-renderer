@@ -18,6 +18,7 @@ export default defineConfig({
     },
   },
   build: {
+    target: 'esnext',
     manifest: true,
     minify: true,
     emptyOutDir: true,
@@ -32,6 +33,7 @@ export default defineConfig({
       plugins: [
         typescript({
           outDir: 'dist',
+          declaration: true,
           exclude: ['test/**/*', 'playground/**/*'],
         }),
       ],
