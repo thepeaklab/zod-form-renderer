@@ -67,7 +67,8 @@ export const FormRenderer = <
       [K in Capitalize<TKey>]: Uncapitalize<K> extends keyof Partial<{
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         [K in TCustomKey]: FieldRenderer<any>;
-      }>
+      }> &
+        object
         ? Partial<{
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             [K in TCustomKey]: FieldRenderer<any>;
