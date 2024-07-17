@@ -22,6 +22,7 @@ jobs:
           node-version: 20
 
       - run: npm ci
+      - run: npm run build
 
       - name: Semantic Release
         env:
