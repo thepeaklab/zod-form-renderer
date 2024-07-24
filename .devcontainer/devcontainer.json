@@ -1,0 +1,25 @@
+{
+  "name": "zod-form-renderer",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-20",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "christian-kohler.npm-intellisense",
+        "christian-kohler.path-intellisense",
+        "dbaeumer.vscode-eslint",
+        "eamodio.gitlens",
+        "esbenp.prettier-vscode",
+        "GitHub.vscode-github-actions",
+        "GitHub.vscode-pull-request-github",
+        "Orta.vscode-jest",
+        "SonarSource.sonarlint-vscode",
+        "streetsidesoftware.code-spell-checker",
+        "vivaxy.vscode-conventional-commits"
+      ],
+      "settings": {
+        "extensions.ignoreRecommendations": true
+      }
+    }
+  },
+  "postCreateCommand": "npm ci"
+}
