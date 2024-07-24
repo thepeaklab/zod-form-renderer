@@ -62,7 +62,7 @@
     "tslib": "^2.6.3",
     "typescript": "^5.2.2",
     "vite": "^5.0.8",
-    "vitest": "^2.0.0"
+    "vitest": "^2.0.4"
   },
   "release": {
     "branches": [
