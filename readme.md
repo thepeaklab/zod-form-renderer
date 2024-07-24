@@ -223,7 +223,7 @@ Please note that you have to provide the props type manually as a generic in thi
 
 ### Code of Conduct
 
-Please read our [Code of conduct](./CODE_OF_CONDUCT) to keep our community open and respectable. 💖
+Please read our [Code of conduct](./CODE_OF_CONDUCT.md) to keep our community open and respectable. 💖
 
 ### Want to help?
 
