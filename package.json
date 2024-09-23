@@ -20,12 +20,12 @@
   "type": "module",
   "exports": {
     ".": {
-      "import": "./dist/index.es.js",
+      "import": "./dist/index.js",
       "require": "./dist/index.cjs.js"
     }
   },
   "main": "./dist/index.cjs.js",
-  "module": "./dist/index.es.js",
+  "module": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "files": [
     "dist"
