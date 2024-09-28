@@ -3,6 +3,7 @@ import typescript from '@rollup/plugin-typescript';
 import react from '@vitejs/plugin-react';
 import * as path from 'path';
 import { defineConfig } from 'vite';
+import pkgJson from './package.json';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -30,6 +31,13 @@ export default defineConfig({
       formats: ['es', 'cjs'],
     },
     rollupOptions: {
+      external: [...Object.keys(pkgJson.peerDependencies), 'react/jsx-runtime'],
+      output: {
+        globals: {
+          react: 'React',
+          'react-dom': 'ReactDOM',
+        },
+      },
       plugins: [
         typescript({
           outDir: 'dist',
