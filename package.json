@@ -44,7 +44,7 @@
     "zod": "3.x"
   },
   "devDependencies": {
-    "@rollup/plugin-typescript": "^11.1.6",
+    "@rollup/plugin-typescript": "^12.1.0",
     "@semantic-release/changelog": "^6.0.3",
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.5.2",
