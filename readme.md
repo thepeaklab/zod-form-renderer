@@ -6,6 +6,10 @@
 
 Auto-infer form fields from [zod](https://zod.dev/) schema and render them with [react-hook-form](https://www.react-hook-form.com/) with E2E type safety.
 
+<p style="background-color: #FAEFB1; border: 2px solid #fec106;padding: 16px; border-radius: 8px;"><span style="font-weight: 600">&#9888; IMPORTANT:</span>
+The zod-form-renderer will not be migrated to zod v4. We decided to freeze the current state and will not provide further development.
+</p>
+
 ## Table of Contents <!-- omit from toc -->
 
 - [Installation](#installation)
